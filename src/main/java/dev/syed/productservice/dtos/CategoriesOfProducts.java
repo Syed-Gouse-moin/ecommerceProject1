@@ -1,17 +1,17 @@
-package dev.syed.productservice.models;
+package dev.syed.productservice.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
-public class Category {
-    private Long id;
-    private String title;
+public class CategoriesOfProducts {
+    private String name;
 }

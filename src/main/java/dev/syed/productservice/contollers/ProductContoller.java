@@ -1,11 +1,14 @@
 package dev.syed.productservice.contollers;
 
+import dev.syed.productservice.dtos.CategoriesOfProducts;
 import dev.syed.productservice.dtos.CreateProductRequestDto;
+import dev.syed.productservice.exceptions.ProductNotFoundException;
 import dev.syed.productservice.models.Product;
 import dev.syed.productservice.serivces.FakeStoreProductService;
 import dev.syed.productservice.serivces.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sound.sampled.Port;
 import java.util.List;
 
 @RestController
@@ -28,7 +31,7 @@ public class ProductContoller {
         );
     }
     @GetMapping("/products/{id}")
-    public Product getProductDetails(@PathVariable("id") Long productId){
+    public Product getProductDetails(@PathVariable("id") Long productId) throws ProductNotFoundException {
         return productService.getSingleProduct(productId);
     }
     @GetMapping("/products/category/{cg}")
@@ -38,5 +41,22 @@ public class ProductContoller {
     @DeleteMapping("/products/{id}")
     public Product DeleteProduct(@PathVariable("id") Long productId){
         return productService.DeleteProduct(productId);
+    }
+    @PatchMapping("/products/{id}")
+    public Product UpdateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductRequestDto requestDto){
+        return productService.UpdateProduct(productId,
+                requestDto.getTitle(),
+                requestDto.getImage(),
+                requestDto.getDescription(),
+                requestDto.getCategory(),
+                requestDto.getPrice());
+    }
+    @GetMapping("/products")
+    public List<Product> getAllProducts(){
+        return productService.getAllProducts();
+    }
+    @GetMapping("/products/categories")
+    public List<String> getCategoryAllProducts(){
+        return productService.getProductsByCategory();
     }
 }
