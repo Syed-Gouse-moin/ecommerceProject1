@@ -1,24 +1,26 @@
 package dev.syed.productservice.contollers;
 
-import dev.syed.productservice.dtos.CategoriesOfProducts;
 import dev.syed.productservice.dtos.CreateProductRequestDto;
 import dev.syed.productservice.exceptions.ProductNotFoundException;
+import dev.syed.productservice.exceptions.CategoryNotFoundException;
+import dev.syed.productservice.models.Category;
 import dev.syed.productservice.models.Product;
-import dev.syed.productservice.serivces.FakeStoreProductService;
 import dev.syed.productservice.serivces.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sound.sampled.Port;
 import java.util.List;
 
 @RestController
 public class ProductContoller {
 
+    private final Category category;
     //private ProductService productService = new FakeStoreProductService();
     // Dependency injection (IOC bc Framework is done behalf of us)
     private ProductService productService;
-    public ProductContoller(ProductService productService) {
+    public ProductContoller(@Qualifier("selfProductService") ProductService productService, Category category) {
         this.productService = productService;
+        this.category = category;
     }
     @PostMapping("/products")
     public Product createProduct(@RequestBody CreateProductRequestDto requestDto) {
@@ -43,7 +45,7 @@ public class ProductContoller {
         return productService.DeleteProduct(productId);
     }
     @PatchMapping("/products/{id}")
-    public Product UpdateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductRequestDto requestDto){
+    public Product UpdateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductRequestDto requestDto) throws ProductNotFoundException, CategoryNotFoundException {
         return productService.UpdateProduct(productId,
                 requestDto.getTitle(),
                 requestDto.getImage(),
