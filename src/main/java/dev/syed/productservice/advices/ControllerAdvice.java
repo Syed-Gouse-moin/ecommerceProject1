@@ -1,5 +1,6 @@
 package dev.syed.productservice.advices;
 
+import com.stripe.exception.StripeException;
 import dev.syed.productservice.dtos.errorDto;
 import dev.syed.productservice.exceptions.ProductNotFoundException;
 import dev.syed.productservice.exceptions.CategoryNotFoundException;
@@ -21,6 +22,12 @@ public class ControllerAdvice {
         errorDto errorMessage = new errorDto();
         errorMessage.setMessage(e.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(StripeException.class)
+    public ResponseEntity<Object> handleStripeException(StripeException e) {
+        errorDto errorMessage = new errorDto();
+        errorMessage.setMessage("Stripe exception");
+        return new ResponseEntity<>(errorMessage,HttpStatus.NOT_FOUND);
     }
 }
 
